@@ -1,0 +1,67 @@
+# Build the firmware with the same ESP-IDF version used locally (v6.1.1)
+# on every pull request and every push to main.
+#
+# Why a pinned container instead of a setup action: the official
+# espressif/idf image contains the exact toolchain and Python env, so
+# CI and the local EIM install resolve to the same compiler. Bump the
+# tag deliberately together with the local IDF version.
+name: build
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  esp-idf-build:
+    name: ESP-IDF v6.1.1 build (esp32c3)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: espressif/idf:v6.1.1
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        # The container entrypoint is bypassed by Actions, so the IDF
+        # environment is exported explicitly. Target comes from
+        # sdkconfig.defaults (CONFIG_IDF_TARGET="esp32c3").
+        run: |
+          set -o pipefail
+          . "$IDF_PATH/export.sh" > /dev/null
+          idf.py build 2>&1 | tee build.log
+
+      - name: Fail on warnings in project sources
+        # Only our code (main/, components/) must be warning-free;
+        # warnings inside ESP-IDF itself are outside our control.
+        run: |
+          # GCC may print absolute paths or paths relative to build/.
+          if grep -E "^(${GITHUB_WORKSPACE}/|\.\./)(main|components)/[^:]*:[0-9]+:[0-9]+: warning:" build.log; then
+            echo "::error::Compiler warnings in project sources (see above)"
+            exit 1
+          fi
+          echo "No warnings in project sources."
+
+      - name: Size report
+        run: |
+          . "$IDF_PATH/export.sh" > /dev/null
+          idf.py size | tee size.txt
+          {
+            echo '### Firmware size (`idf.py size`)'
+            echo '```'
+            cat size.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
