@@ -1,0 +1,14 @@
+# Project-level configuration defaults. sdkconfig is generated from this file
+# and is not committed. Only deliberate, documented choices go here.
+
+# Target: ESP32-C3 SuperMini (verified 2026-11-20).
+CONFIG_IDF_TARGET="esp32c3"
+
+# Primary console on the built-in USB-Serial/JTAG peripheral.
+# The SuperMini has no external USB-UART bridge, so UART0 (GPIO20/21)
+# is not connected to the host; logs must go over the native USB port (COM6).
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+
+# Flash size: 4 MB, verified from the spi_flash driver detection log
+# ("Detected size(4096k)") on 2026-11-20. Default (2 MB) left half unused.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
