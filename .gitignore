@@ -1,0 +1,58 @@
+# ===== ESP-IDF =====
+build/
+managed_components/
+sdkconfig.old
+# sdkconfig is generated from sdkconfig.defaults; commit sdkconfig.defaults instead.
+sdkconfig
+# dependencies.lock IS committed (reproducible component versions).
+
+# ===== STM32 (CubeIDE / CMake / Make) =====
+Debug/
+Release/
+build-*/
+.settings/
+*.launch
+
+# ===== Build artifacts =====
+*.o
+*.d
+*.a
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.su
+compile_commands.json
+.cache/
+
+# ===== Host tests / tools =====
+test/build/
+pc_tools/**/__pycache__/
+pc_tools/**/.venv/
+*.pyc
+
+# ===== Secrets — NEVER commit =====
+# Wi-Fi credentials, API tokens, firmware signing keys (Level 5-6)
+secrets.h
+*_secrets.h
+.env
+*.pem
+*.key
+*.der
+keys/
+
+# ===== Editor / OS =====
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/c_cpp_properties.json
+.idea/
+desktop.ini
+Thumbs.db
+.DS_Store
+*.swp
+*~
+
+# ===== Claude Code (personal) =====
+.claude/settings.local.json

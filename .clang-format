@@ -1,0 +1,39 @@
+# Embedded C formatting — close to ESP-IDF style, compatible with STM32 projects.
+# Requires clang-format 15+ (InsertBraces). Apply to project code only, not vendor SDK/HAL.
+---
+Language: Cpp
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 120
+ContinuationIndentWidth: 4
+
+# Braces: function bodies on a new line, control statements on the same line.
+BreakBeforeBraces: Linux
+# Always use braces for if/else/for/while bodies (MISRA C Rule 15.6).
+InsertBraces: true
+
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+
+IndentCaseLabels: true
+SpaceBeforeParens: ControlStatements
+PointerAlignment: Right
+
+AlignConsecutiveMacros: Consecutive
+AlignConsecutiveAssignments: None
+AlignTrailingComments: true
+
+# Include order can matter in embedded code (config headers first); do not reorder.
+SortIncludes: Never
+IncludeBlocks: Preserve
+
+MaxEmptyLinesToKeep: 1
+KeepEmptyLinesAtTheStartOfBlocks: false
+ReflowComments: true
+...
