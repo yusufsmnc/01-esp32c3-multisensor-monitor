@@ -94,7 +94,6 @@ static void log_boot_info(void)
 
 void app_main(void)
 {
-    int ci_warning_gate_test; /* TEMP: deliberate -Wunused-variable, reverted before merge */
     log_boot_info();
 
     /* vTaskDelayUntil keeps a fixed period independent of log execution time. */
