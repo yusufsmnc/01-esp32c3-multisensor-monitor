@@ -94,7 +94,10 @@ static void log_boot_info(void)
 
 void app_main(void)
 {
-    log_boot_info();
+    const int ci_gate = 0; /* TEMP: deliberate Cppcheck finding, reverted before merge */
+    if (ci_gate == 0) {
+        log_boot_info();
+    }
 
     /* vTaskDelayUntil keeps a fixed period independent of log execution time. */
     const TickType_t period_ticks = pdMS_TO_TICKS(APP_HEARTBEAT_PERIOD_MS);
